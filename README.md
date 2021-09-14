@@ -48,10 +48,31 @@ $clusterke=1; //cluster begin from 1
 for ($i=0; $i < $indexcount ; $i++) {
   if ($coreArr[$i]) { //if data-i is core point
     if ($clusterArr[$i]==-1) { //if data-i not joining any cluster yet
-      $clusterArr[$i]=$clusterke; //data-i join cluster $clusterke
+      $clusterArr[$i]=$clusterke; //data ke i adalah cluster ke $clusterke
       expand_neighbour($i,$clusterke);
           $clusterke++; //next cluster
     }
  }
+}
+
+//searching for neighbor
+function expand_neighbour ($index,$cluster){
+  global $indexcount, $distance_matrix, $epsilon,$coreArr,$clusterArr ;
+  for ($j=0; $j < $indexcount ; $j++) {
+    if ($clusterArr[$j]==-1) {
+      if ($distance_matrix[$index][$j] <= $epsilon  && $j != $index) {//if distance lees than epsilon
+          $clusterArr[$j]=$cluster; //data-j join same clusterwith data index
+        if ($coreArr[$j]) { //if data-j is core point
+          expand_neighbour($j,$cluster);
+        }
+      }
+    }
+
+  }
+}
+
+//calculate distance
+function euclid($x1,$y1,$x2,$y2)	{
+  return sqrt(pow(($x1-$x2),2)+pow(($y1-$y2),2));
 }
 ```
